@@ -40,7 +40,7 @@ class CartAdapter(
         holder.view.tv_price.text = cart.harga.toString()
         holder.view.tv_qty.text = cart.jumlah.toString()
 
-        cart.total = cart.harga * cart.jumlah
+//        cart.total = cart.harga * cart.jumlah
 
         (context as CartActivity).liveTotal()
         holder.view.tv_plus.setOnClickListener {
@@ -48,7 +48,7 @@ class CartAdapter(
             cart.total = cart.harga * cart.jumlah
             holder.view.tv_qty.text = cart.jumlah.toString()
             (context as CartActivity).liveTotal()
-            listener.onUpdate(cart)
+//            listener.onUpdate(cart)
         }
         holder.view.tv_minus.setOnClickListener {
             if (cart.jumlah > 1) {
