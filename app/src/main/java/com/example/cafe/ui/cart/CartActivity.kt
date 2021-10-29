@@ -3,7 +3,6 @@ package com.example.cafe.ui.cart
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +13,7 @@ import com.example.cafe.retrofit.ApiService
 import com.example.cafe.retrofit.response.SubmitResponse
 import com.example.cafe.retrofit.response.cart.Cart
 import com.example.cafe.retrofit.response.cart.CartResponse
+import com.example.cafe.utils.idrFormat
 import kotlinx.android.synthetic.main.activity_cart.*
 import retrofit2.Call
 import retrofit2.Response
@@ -164,8 +164,7 @@ class CartActivity : AppCompatActivity() {
         for (cart in cartAdapter.carts) {
             total += cart.total
         }
-        tv_totalprice.text = total.toString()
-//        tv_totalprice.text = "Total: Rp ${idrFormat(total)}"
+        tv_totalprice.text = "Rp. ${idrFormat(total)}"
     }
 
     private fun checkout() {
