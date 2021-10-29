@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/iv_image_product"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nasgor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Nasi Goreng"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_image_product"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:text="12.000"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/tv_minus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="10dp"
+        android:background="#A9A9A9"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="-"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_plus"
+        app:layout_constraintEnd_toStartOf="@+id/tv_qty" />
+
+    <TextView
+        android:id="@+id/tv_qty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="0"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_plus"
+        app:layout_constraintEnd_toStartOf="@+id/tv_plus" />
+
+    <TextView
+        android:id="@+id/tv_plus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="#A9A9A9"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="+"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_image_product"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
