@@ -34,13 +34,13 @@ interface CashierEndpoint {
     @FormUrlEncoded
     @PUT("keranjang/{id}")
     fun updateKeranjang(
-        @Path("id") id: String,
+        @Path("id") id_keranjang: String,
         @Field("jumlah") jumlah: Int
     ): Call<SubmitResponse>
 
     @DELETE("keranjang/{id}")
     fun deleteKeranjang(
-        @Path("id") id: String
+        @Path("id") id_keranjang: String
     ): Call<SubmitResponse>
 
     @FormUrlEncoded

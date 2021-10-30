@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_transaction"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    tools:context=".ui.transaction.TransactionActivity">
+
+    <RadioGroup
+        android:id="@+id/rg_filter_by"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3">
+
+        <RadioButton
+            android:id="@+id/rb_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Tanggal"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/rb_cashier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Kasir"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/et_no_transaction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="No Transaksi"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/rg_filter_by"
+        app:layout_constraintTop_toBottomOf="@+id/rg_filter_by"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <EditText
+        android:id="@+id/et_date_start"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:hint="Tanggal Awal"
+        android:padding="10dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/rg_filter_by"
+        app:layout_constraintTop_toBottomOf="@+id/et_no_transaction"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <EditText
+        android:id="@+id/et_date_end"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:hint="Tanggal Akhir"
+        android:padding="10dp"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/rg_filter_by"
+        app:layout_constraintTop_toBottomOf="@+id/et_date_start"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_cashier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rg_filter_by"
+        app:layout_constraintTop_toBottomOf="@+id/et_date_end"
+        app:layout_constraintWidth_percent="0.3"
+        tools:listitem="@layout/adapter_cashier" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_transaction"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#808080"
+        android:padding="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rg_filter_by"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintWidth_percent="0.7"
+        tools:listitem="@layout/adapter_transaction" />
+
+    <ProgressBar
+        android:id="@+id/pb_transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/list_transaction"
+        app:layout_constraintStart_toStartOf="@+id/list_transaction"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,11 +9,11 @@ const val BASE_URL = "https://deallcoffeeshop.xyz/api/"
 
 object ApiService {
 
-    /*val owner: OwnerEndpoint
+    val owner: OwnerEndpoint
         get() {
             return retrofit.create(
                 OwnerEndpoint::class.java)
-        }*/
+        }
 
     val cashier: CashierEndpoint
         get() {

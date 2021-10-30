@@ -11,6 +11,7 @@ import com.example.cafe.retrofit.ApiService
 import com.example.cafe.retrofit.response.login.Login
 import com.example.cafe.retrofit.response.login.LoginResponse
 import com.example.cafe.ui.home.MainActivity
+import com.example.cafe.ui.transaction.TransactionActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -101,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(Intent(this, MainActivity::class.java))
                     }
                     "owner" -> {
-//                        startActivity(Intent(this, TransactionActivity::class.java))
+                        startActivity(Intent(this, TransactionActivity::class.java))
                     }
                     "chef" -> {
 

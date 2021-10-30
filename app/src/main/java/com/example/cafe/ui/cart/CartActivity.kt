@@ -3,6 +3,7 @@ package com.example.cafe.ui.cart
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -22,6 +23,7 @@ class CartActivity : AppCompatActivity() {
 
     private val api by lazy { ApiService.cashier }
     private val pref by lazy { PrefManager(this) }
+
     private lateinit var cartAdapter: CartAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,12 +108,11 @@ class CartActivity : AppCompatActivity() {
                         cartResponse(response.body()!!)
                     }
                 }
-
             })
     }
 
     private fun updateCart(id: String, amount: Int) {
-        //Log.d("CartActivity", "amount:$amount")
+        Log.d("CartActivity", "amount:$amount")
         api.updateKeranjang(id, amount)
             .enqueue(object : retrofit2.Callback<SubmitResponse> {
                 override fun onFailure(call: Call<SubmitResponse>, t: Throwable) {
@@ -127,7 +128,6 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun deleteCart(id_keranjang: String) {
-        //Log.d("CartActivity", "amount:$amount")
         api.deleteKeranjang(id_keranjang)
             .enqueue(object : retrofit2.Callback<SubmitResponse> {
                 override fun onFailure(call: Call<SubmitResponse>, t: Throwable) {
@@ -232,7 +232,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
+        finish()
         return super.onSupportNavigateUp()
     }
 

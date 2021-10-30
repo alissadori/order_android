@@ -9,6 +9,7 @@ import com.example.cafe.R
 import com.example.cafe.preference.PrefManager
 import com.example.cafe.ui.home.MainActivity
 import com.example.cafe.ui.login.LoginActivity
+import com.example.cafe.ui.transaction.TransactionActivity
 
 class SplashActivity : AppCompatActivity() {
     private val pref by lazy { PrefManager(this) }
@@ -23,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
                         startActivity(Intent(this, MainActivity::class.java))
                     }
                     "owner" -> {
-//                        startActivity(Intent(this, TransactionActivity::class.java))
+                        startActivity(Intent(this, TransactionActivity::class.java))
                     }
                     "chef" -> {
 

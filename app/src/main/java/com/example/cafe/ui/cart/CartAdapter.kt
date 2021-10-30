@@ -36,12 +36,8 @@ class CartAdapter(
             .placeholder(R.drawable.no_image)
             .error(R.drawable.no_image)
             .into(holder.view.image_product)
-
         holder.view.tv_price.text = cart.harga.toString()
         holder.view.tv_qty.text = cart.jumlah.toString()
-
-       cart.total = cart.harga * cart.jumlah
-
         (context as CartActivity).liveTotal()
         holder.view.tv_plus.setOnClickListener {
             cart.jumlah++
