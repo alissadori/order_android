@@ -2,6 +2,7 @@ package com.example.cafe.ui.transaction
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -16,6 +17,7 @@ import com.example.cafe.preference.PrefManager
 import com.example.cafe.retrofit.ApiService
 import com.example.cafe.retrofit.response.cashier.Cashier
 import com.example.cafe.retrofit.response.cashier.CashierResponse
+import com.example.cafe.retrofit.response.export.ExportResponse
 import com.example.cafe.retrofit.response.transaction.Transaction
 import com.example.cafe.retrofit.response.transaction.TransactionResponse
 import com.example.cafe.ui.login.LoginActivity
@@ -227,10 +229,6 @@ class TransactionActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            /*R.id.action_chart -> {
-                startActivity(Intent(this, ChartActivity::class.java))
-                true
-            }
             R.id.action_export_excel -> {
                 viewTransactionBy(transactionByDate)
                 if (dateStart.isNotEmpty() && dateEnd.isNotEmpty()) {
@@ -251,6 +249,11 @@ class TransactionActivity : AppCompatActivity() {
                 }
                 true
             }
+            /*R.id.action_chart -> {
+                startActivity(Intent(this, ChartActivity::class.java))
+                true
+            }
+
             */
             R.id.action_logout -> {
                 pref.clear()
@@ -262,8 +265,38 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
+    private fun export(exportType: String){
+        var call: Call<ExportResponse>? = null
+        when (exportType) {
+            "excel" -> call = api.exportExcel(dateStart, dateEnd)
+            "pdf" -> call = api.exportPdf(dateStart, dateEnd)
+        }
+        call?.let {
+            Toast.makeText(applicationContext, "Mohon Tunggu...", Toast.LENGTH_SHORT).show()
+            call.enqueue(object : retrofit2.Callback<ExportResponse> {
+                override fun onResponse(
+                    call: Call<ExportResponse>,
+                    response: Response<ExportResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        exportResponse( response.body()!! )
+                    }
+                }
+                override fun onFailure(call: Call<ExportResponse>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Export Gagal", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    private fun exportResponse(exportResponse: ExportResponse){
+        val openURL = Intent(Intent.ACTION_VIEW)
+        openURL.data = Uri.parse( exportResponse.data )
+        startActivity(openURL)
     }
 }
