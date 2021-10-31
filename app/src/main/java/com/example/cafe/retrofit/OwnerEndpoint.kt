@@ -2,6 +2,7 @@ package com.example.cafe.retrofit
 
 import com.example.cafe.retrofit.response.cashier.CashierResponse
 import com.example.cafe.retrofit.response.transaction.TransactionResponse
+import com.example.cafe.retrofit.response.transactiondetail.TransactionDetailResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -24,13 +25,13 @@ interface OwnerEndpoint {
         @Field("username") username: String,
         @Field("no_transaksi") no_transaksi: String
     ): Call<TransactionResponse>
-/*
+
     @FormUrlEncoded
     @POST("transaksi/detail")
     fun transaksiDetail(
         @Field("id_transaksi") id_transaksi: String
     ): Call<TransactionDetailResponse>
-
+/*
     @FormUrlEncoded
     @POST("chart")
     fun chart(

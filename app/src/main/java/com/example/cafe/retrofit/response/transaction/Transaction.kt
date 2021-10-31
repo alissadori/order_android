@@ -1,5 +1,7 @@
 package com.example.cafe.retrofit.response.transaction
 
+import java.io.Serializable
+
 data class Transaction(
     val catatan: String,
     val created_at: String,
@@ -10,4 +12,4 @@ data class Transaction(
     val total: String,
     val updated_at: String,
     val username: String
-)
+) : Serializable

@@ -5,56 +5,106 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafe.R
+import com.example.cafe.retrofit.ApiService
+import com.example.cafe.retrofit.response.transaction.Transaction
+import com.example.cafe.retrofit.response.transactiondetail.TransactionDetailResponse
+import kotlinx.android.synthetic.main.fragment_transaction_detail.view.*
+import retrofit2.Call
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TransactionDetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TransactionDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private val api by lazy { ApiService.owner }
+    private val actionBar by lazy { (requireActivity() as TransactionActivity).supportActionBar!! }
+
+    private lateinit var fragmentView: View
+    private lateinit var transactionDetailAdapter: TransactionDetailAdapter
+
+    private var transactionId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction_detail, container, false)
+        fragmentView = inflater.inflate(R.layout.fragment_transaction_detail, container, false)
+        return fragmentView
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TransactionDetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TransactionDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupView()
+        setupRecyclerView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        argumentsTransaction()
+        detailTransaction()
+    }
+
+    private fun setupRecyclerView() {
+        transactionDetailAdapter = TransactionDetailAdapter(arrayListOf())
+        fragmentView.list_detail_product.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = transactionDetailAdapter
+        }
+    }
+
+    private fun argumentsTransaction() {
+        val transaction = arguments!!.getSerializable("arg_transaction") as Transaction
+        transactionId = transaction.id_transaksi
+        fragmentView.text_table.text = transaction.no_meja
+        fragmentView.text_name.text = transaction.nama_pelanggan
+        fragmentView.text_note.text = transaction.catatan
+    }
+
+    private fun setupView() {
+        actionBar.title = "Detail Transaksi"
+        actionBar.setDisplayHomeAsUpEnabled(true)
+    }
+
+    private fun detailTransaction() {
+        transactionId?.let {
+            loadingDetail(true)
+            api.transaksiDetail(it)
+                .enqueue(object : retrofit2.Callback<TransactionDetailResponse> {
+                    override fun onResponse(
+                        call: Call<TransactionDetailResponse>,
+                        response: Response<TransactionDetailResponse>
+                    ) {
+                        loadingDetail(true)
+                        if (response.isSuccessful) {
+                            transactionDetailResponse(response.body()!!)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TransactionDetailResponse>, t: Throwable) {
+                        loadingDetail(false)
+                    }
+                })
+        }
+    }
+
+    private fun loadingDetail(loading: Boolean) {
+        when (loading) {
+            true -> {
+                fragmentView.pb_transaction_detail.visibility = View.VISIBLE
             }
+            false -> {
+                fragmentView.pb_transaction_detail.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun transactionDetailResponse(transactionDetailResponse: TransactionDetailResponse) {
+        transactionDetailAdapter.setData(transactionDetailResponse.data)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        actionBar.setDisplayHomeAsUpEnabled(false)
+        actionBar.title = "Laporan Transaksi "
     }
 }

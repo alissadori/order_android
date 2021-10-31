@@ -135,10 +135,10 @@ class TransactionActivity : AppCompatActivity() {
         }
         transactionAdapter = TransactionAdapter(arrayListOf(), object : TransactionAdapter.OnAdapterListener {
             override fun onClick(transaction: Transaction) {
-//                val bundle = Bundle()
-//                bundle.putSerializable("arg_transaction", transaction)
+                val bundle = Bundle()
+                bundle.putSerializable("arg_transaction", transaction)
                 val transactionDetailFragment = TransactionDetailFragment()
-//                transactionDetailFragment.arguments = bundle
+                transactionDetailFragment.arguments = bundle
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container_transaction, transactionDetailFragment)
                     .addToBackStack(null)
@@ -262,5 +262,8 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
