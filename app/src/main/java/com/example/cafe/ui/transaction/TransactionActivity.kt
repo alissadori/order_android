@@ -20,6 +20,8 @@ import com.example.cafe.retrofit.response.cashier.CashierResponse
 import com.example.cafe.retrofit.response.export.ExportResponse
 import com.example.cafe.retrofit.response.transaction.Transaction
 import com.example.cafe.retrofit.response.transaction.TransactionResponse
+import com.example.cafe.ui.BaseActivity
+import com.example.cafe.ui.chart.ChartActivity
 import com.example.cafe.ui.login.LoginActivity
 import com.example.cafe.utils.CalendarUtil
 import kotlinx.android.synthetic.main.activity_transaction.*
@@ -30,7 +32,7 @@ const val TAG = "TransactionActivity"
 const val transactionByDate = 0
 const val transactionByCashier = 1
 
-class TransactionActivity : AppCompatActivity() {
+class TransactionActivity : BaseActivity() {
     private val pref by lazy { PrefManager(this) }
     private val api by lazy { ApiService.owner }
 
@@ -56,12 +58,12 @@ class TransactionActivity : AppCompatActivity() {
         listCashier()
     }
 
-    private fun setupView(){
+    private fun setupView() {
         supportActionBar!!.title = "Laporan Transaksi"
         viewTransactionBy(transactionByDate)
     }
 
-    private fun viewTransactionBy(transactionBy: Int){
+    private fun viewTransactionBy(transactionBy: Int) {
         currentTransactionBy = transactionBy
         when (transactionBy) {
             transactionByDate -> {
@@ -79,7 +81,7 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupListener(){
+    private fun setupListener() {
         rg_filter_by.setOnCheckedChangeListener { group, checkedId ->
             val rb: RadioButton = group.findViewById(checkedId)
             when (rb.id) {
@@ -93,34 +95,44 @@ class TransactionActivity : AppCompatActivity() {
         }
         et_no_transaction.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                listTransaction( currentTransactionBy )
+                listTransaction(currentTransactionBy)
                 true
             }
             false
         }
         et_date_start.setOnClickListener {
             val calender = CalendarUtil
-            val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
-                    view, year, month, day ->
-                dateStart = "$year-${(month+1)}-$day"
-                et_date_start.setText( dateStart )
-                listTransaction(transactionByDate)
-            }, calender.year, calender.month, calender.day)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { view, year, month, day ->
+                    dateStart = "$year-${(month + 1)}-$day"
+                    et_date_start.setText(dateStart)
+                    listTransaction(transactionByDate)
+                },
+                calender.year,
+                calender.month,
+                calender.day
+            )
             datePickerDialog.show()
         }
         et_date_end.setOnClickListener {
             val calender = CalendarUtil
-            val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener {
-                    view, year, month, day ->
-                dateEnd = "$year-${(month+1)}-$day"
-                et_date_end.setText( dateEnd )
-                listTransaction(transactionByDate)
-            }, calender.year, calender.month, calender.day)
+            val datePickerDialog = DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { view, year, month, day ->
+                    dateEnd = "$year-${(month + 1)}-$day"
+                    et_date_end.setText(dateEnd)
+                    listTransaction(transactionByDate)
+                },
+                calender.year,
+                calender.month,
+                calender.day
+            )
             datePickerDialog.show()
         }
     }
 
-    private fun setupRecyclerView(){
+    private fun setupRecyclerView() {
         cashierAdapter =
             CashierAdapter(
                 arrayListOf(),
@@ -135,57 +147,61 @@ class TransactionActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = cashierAdapter
         }
-        transactionAdapter = TransactionAdapter(arrayListOf(), object : TransactionAdapter.OnAdapterListener {
-            override fun onClick(transaction: Transaction) {
-                val bundle = Bundle()
-                bundle.putSerializable("arg_transaction", transaction)
-                val transactionDetailFragment = TransactionDetailFragment()
-                transactionDetailFragment.arguments = bundle
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.container_transaction, transactionDetailFragment)
-                    .addToBackStack(null)
-                    .commit()
-                    }
-                })
+        transactionAdapter =
+            TransactionAdapter(arrayListOf(), object : TransactionAdapter.OnAdapterListener {
+                override fun onClick(transaction: Transaction) {
+                    val bundle = Bundle()
+                    bundle.putSerializable("arg_transaction", transaction)
+                    val transactionDetailFragment = TransactionDetailFragment()
+                    transactionDetailFragment.arguments = bundle
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.container_transaction, transactionDetailFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            })
         list_transaction.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = transactionAdapter
         }
     }
 
-    private fun listCashier(){
+    private fun listCashier() {
         api.kasir().enqueue(object : retrofit2.Callback<CashierResponse> {
             override fun onFailure(call: Call<CashierResponse>, t: Throwable) {
 
             }
+
             override fun onResponse(
                 call: Call<CashierResponse>,
                 response: Response<CashierResponse>
             ) {
                 if (response.isSuccessful) {
-                    cashierResponse( response.body()!! )
+                    cashierResponse(response.body()!!)
                 }
             }
         })
     }
 
     private fun cashierResponse(cashierResponse: CashierResponse) {
-        cashierAdapter.setData( cashierResponse.data )
+        cashierAdapter.setData(cashierResponse.data)
     }
 
-    private fun listTransaction(transactionBy: Int){
-        var call : Call<TransactionResponse>? = null
-        when ( transactionBy ) {
+    private fun listTransaction(transactionBy: Int) {
+        var call: Call<TransactionResponse>? = null
+        when (transactionBy) {
             transactionByDate -> {
                 if (dateStart.isNotEmpty() && dateEnd.isNotEmpty()) {
-                    call = api.transaksiDate( dateStart, dateEnd, et_no_transaction.text.toString() )
+                    call = api.transaksiDate(dateStart, dateEnd, et_no_transaction.text.toString())
                 } else {
-                    Toast.makeText(applicationContext, "Lengkapi tanggal pencarian",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext, "Lengkapi tanggal pencarian",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             transactionByCashier -> {
-                call = api.transaksiKasir( usernameCashier, et_no_transaction.text.toString() )
+                call = api.transaksiKasir(usernameCashier, et_no_transaction.text.toString())
             }
         }
         loadingTransaction(true)
@@ -194,13 +210,14 @@ class TransactionActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<TransactionResponse>, t: Throwable) {
                     loadingTransaction(false)
                 }
+
                 override fun onResponse(
                     call: Call<TransactionResponse>,
                     response: Response<TransactionResponse>
                 ) {
                     loadingTransaction(false)
                     if (response.isSuccessful) {
-                        transactionResponse( response.body()!! )
+                        transactionResponse(response.body()!!)
                     }
                 }
             })
@@ -208,7 +225,7 @@ class TransactionActivity : AppCompatActivity() {
     }
 
     private fun loadingTransaction(loading: Boolean) {
-        when(loading) {
+        when (loading) {
             true -> {
                 pb_transaction.visibility = View.VISIBLE
             }
@@ -219,7 +236,7 @@ class TransactionActivity : AppCompatActivity() {
     }
 
     private fun transactionResponse(transactionResponse: TransactionResponse) {
-        transactionAdapter.setData( transactionResponse.data )
+        transactionAdapter.setData(transactionResponse.data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -229,13 +246,19 @@ class TransactionActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_chart -> {
+                startActivity(Intent(this, ChartActivity::class.java))
+                true
+            }
             R.id.action_export_excel -> {
                 viewTransactionBy(transactionByDate)
                 if (dateStart.isNotEmpty() && dateEnd.isNotEmpty()) {
                     export("excel")
                 } else {
-                    Toast.makeText(applicationContext, "Lengkapi tanggal",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext, "Lengkapi tanggal",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 true
             }
@@ -244,17 +267,13 @@ class TransactionActivity : AppCompatActivity() {
                 if (dateStart.isNotEmpty() && dateEnd.isNotEmpty()) {
                     export("pdf")
                 } else {
-                    Toast.makeText(applicationContext, "Lengkapi tanggal pencarian",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        applicationContext, "Lengkapi tanggal pencarian",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 true
             }
-            /*R.id.action_chart -> {
-                startActivity(Intent(this, ChartActivity::class.java))
-                true
-            }
-
-            */
             R.id.action_logout -> {
                 pref.clear()
                 startActivity(Intent(this, LoginActivity::class.java))
@@ -265,7 +284,7 @@ class TransactionActivity : AppCompatActivity() {
         }
     }
 
-    private fun export(exportType: String){
+    private fun export(exportType: String) {
         var call: Call<ExportResponse>? = null
         when (exportType) {
             "excel" -> call = api.exportExcel(dateStart, dateEnd)
@@ -279,9 +298,10 @@ class TransactionActivity : AppCompatActivity() {
                     response: Response<ExportResponse>
                 ) {
                     if (response.isSuccessful) {
-                        exportResponse( response.body()!! )
+                        exportResponse(response.body()!!)
                     }
                 }
+
                 override fun onFailure(call: Call<ExportResponse>, t: Throwable) {
                     Toast.makeText(applicationContext, "Export Gagal", Toast.LENGTH_SHORT).show()
                 }
@@ -294,9 +314,9 @@ class TransactionActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    private fun exportResponse(exportResponse: ExportResponse){
+    private fun exportResponse(exportResponse: ExportResponse) {
         val openURL = Intent(Intent.ACTION_VIEW)
-        openURL.data = Uri.parse( exportResponse.data )
+        openURL.data = Uri.parse(exportResponse.data)
         startActivity(openURL)
     }
 }

@@ -1,6 +1,7 @@
 package com.example.cafe.retrofit
 
 import com.example.cafe.retrofit.response.cashier.CashierResponse
+import com.example.cafe.retrofit.response.chart.ChartResponse
 import com.example.cafe.retrofit.response.export.ExportResponse
 import com.example.cafe.retrofit.response.transaction.TransactionResponse
 import com.example.cafe.retrofit.response.transactiondetail.TransactionDetailResponse
@@ -33,6 +34,12 @@ interface OwnerEndpoint {
         @Field("id_transaksi") id_transaksi: String
     ): Call<TransactionDetailResponse>
 
+    @FormUrlEncoded
+    @POST("chart")
+    fun chart(
+        @Field("tahun") tahun: String
+    ): Call<ChartResponse>
+
     @GET("export-excel")
     fun exportExcel(
         @Query("tgl_awal") tgl_awal: String,
@@ -45,11 +52,4 @@ interface OwnerEndpoint {
         @Query("tgl_akhir") tgl_akhir: String
     ): Call<ExportResponse>
 
-/*
-    @FormUrlEncoded
-    @POST("chart")
-    fun chart(
-        @Field("tahun") tahun: String
-    ): Call<ChartResponse>
-*/
 }
