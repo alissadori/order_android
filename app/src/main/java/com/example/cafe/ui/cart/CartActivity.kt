@@ -1,6 +1,7 @@
 package com.example.cafe.ui.cart
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import com.example.cafe.retrofit.ApiService
 import com.example.cafe.retrofit.response.SubmitResponse
 import com.example.cafe.retrofit.response.cart.Cart
 import com.example.cafe.retrofit.response.cart.CartResponse
+import com.example.cafe.ui.print.PrintActivity
 import com.example.cafe.utils.idrFormat
 import kotlinx.android.synthetic.main.activity_cart.*
 import retrofit2.Call
@@ -217,14 +219,15 @@ class CartActivity : AppCompatActivity() {
             })
             setPositiveButton("Cetak", DialogInterface.OnClickListener { dialog, which ->
                 dialog.dismiss()
-//                val intent = Intent(this@CartActivity, PrintActivity::class.java)
-                startActivity(
+                startActivity(Intent(this@CartActivity, PrintActivity::class.java))
+                //val intent = Intent(this@CartActivity, PrintActivity::class.java)
+                /*startActivity(
                     intent
                         .putExtra("intent_table", et_customertable.text.toString())
                         .putExtra("intent_name", et_customername.text.toString())
                         .putExtra("intent_total", tv_totalprice.text.toString())
                         .putExtra("intent_cart", cartAdapter.carts)
-                )
+                )*/
                 finish()
             })
         }

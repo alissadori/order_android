@@ -8,10 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -212,12 +209,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadingProduct(loading: Boolean) {
         when (loading) {
-            true -> {
-                pb_product.visibility = View.VISIBLE
-            }
-            false -> {
-                pb_product.visibility = View.GONE
-            }
+            true -> pb_product.visibility = View.VISIBLE
+            false -> pb_product.visibility = View.GONE
         }
     }
 

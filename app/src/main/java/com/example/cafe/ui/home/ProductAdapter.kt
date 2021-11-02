@@ -36,10 +36,10 @@ class ProductAdapter(var products: ArrayList<Product>, var listener: OnAdapterLi
             listener.onClick(product)
         }
 //      holder.view.text_price.text = "Rp ${Helper.idrFormat(product.harga.toInt())}"
-        holder.view.setOnLongClickListener {
+        /*holder.view.setOnLongClickListener {
             listener.onClick(product)
             true
-        }
+        }*/
     }
 
     override fun getItemCount() = products.size

@@ -10,22 +10,26 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="Deall's Coffee Shop"
+        android:label="Deall&apos;s Coffee Shop"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.print.PrintActivity"
+            android:screenOrientation="landscape"
+            />
+        <activity
             android:name=".ui.BaseActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.chart.ChartActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.transaction.TransactionActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.cart.CartActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:screenOrientation="landscape"
